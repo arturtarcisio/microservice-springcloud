@@ -3,17 +3,19 @@ package io.github.arturtarcisio.mscustomers.service.impl;
 import io.github.arturtarcisio.mscustomers.domain.Customer;
 import io.github.arturtarcisio.mscustomers.infra.repository.CustomerRepository;
 import io.github.arturtarcisio.mscustomers.service.CustomerService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @Transactional
     public Customer save(Customer customer) {
@@ -21,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-    public Optional<Customer> getByCpf(String cpf) {
+    public Optional<Customer> getCustomerByCpf(String cpf) {
         return customerRepository.findByCpf(cpf);
     }
 
