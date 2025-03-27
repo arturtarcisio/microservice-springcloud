@@ -1,8 +1,8 @@
 package io.github.arturtarcisio.mscards.service.impl;
 
-import io.github.arturtarcisio.mscards.domain.Card;
+import io.github.arturtarcisio.mscards.domain.CreditCard;
 import io.github.arturtarcisio.mscards.dto.CardSaveRequest;
-import io.github.arturtarcisio.mscards.repository.CardRepository;
+import io.github.arturtarcisio.mscards.repository.CreditCardRepository;
 import io.github.arturtarcisio.mscards.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,17 +16,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
 
-    private final CardRepository repository;
+    private final CreditCardRepository repository;
 
     @Override
     @Transactional
-    public Card save(CardSaveRequest cardSaveRequest) {
-        Card card = cardSaveRequest.toModel();
-        return repository.save(card);
+    public CreditCard save(CardSaveRequest cardSaveRequest) {
+        CreditCard creditCard = cardSaveRequest.toModel();
+        return repository.save(creditCard);
     }
 
     @Override
-    public List<Card> findByIncomeLessThanEqual(BigDecimal income) {
+    public List<CreditCard> findByIncomeLessThanEqual(BigDecimal income) {
         return repository.findByIncomeLessThanEqual(income);
     }
 }

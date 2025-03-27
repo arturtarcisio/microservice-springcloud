@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Card {
+public class CreditCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Card {
     private Flag flag;
     private BigDecimal limitCredit;
 
-    public Card(BigDecimal limitCredit, Flag flag, BigDecimal income, String name) {
+    public CreditCard(BigDecimal limitCredit, Flag flag, BigDecimal income, String name) {
         this.limitCredit = limitCredit;
         this.flag = flag;
         this.income = income;
