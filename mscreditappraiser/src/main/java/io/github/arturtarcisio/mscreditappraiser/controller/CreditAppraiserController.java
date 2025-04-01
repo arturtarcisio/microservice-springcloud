@@ -1,8 +1,11 @@
 package io.github.arturtarcisio.mscreditappraiser.controller;
 
 import io.github.arturtarcisio.mscreditappraiser.dto.CustomerStatusCredit;
+import io.github.arturtarcisio.mscreditappraiser.exceptions.DataNotFoundException;
+import io.github.arturtarcisio.mscreditappraiser.exceptions.ErrorComunicationMicroserviceException;
 import io.github.arturtarcisio.mscreditappraiser.service.CreditAppraiserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +25,14 @@ public class CreditAppraiserController {
     }
 
     @GetMapping("/customers-status/{cpf}")
-    public ResponseEntity<CustomerStatusCredit> customerStatusCredit(@PathVariable String cpf) {
-        CustomerStatusCredit customerStatusCredit = creditAppraiserService.getClientStatus(cpf);
-        return ResponseEntity.ok(customerStatusCredit);
+    public ResponseEntity customerStatusCredit(@PathVariable String cpf) {
+        try {
+            CustomerStatusCredit customerStatusCredit = creditAppraiserService.getClientStatus(cpf);
+            return ResponseEntity.ok(customerStatusCredit);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (ErrorComunicationMicroserviceException e) {
+            return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        }
     }
 }
