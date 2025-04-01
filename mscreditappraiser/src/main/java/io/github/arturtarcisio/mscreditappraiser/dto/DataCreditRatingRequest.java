@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class CustomerData {
+import java.math.BigDecimal;
 
-    private Long id;
-    private String name;
-    private Integer age;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DataCreditRatingRequest {
+
+    private String cpf;
+    private BigDecimal income;
 
 }
