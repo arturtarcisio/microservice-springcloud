@@ -21,10 +21,9 @@ public class CreditAppraiserController {
         return "It works!";
     }
 
-    @GetMapping("/cliente-status/{cpf}")
+    @GetMapping("/customers-status/{cpf}")
     public ResponseEntity<CustomerStatusCredit> customerStatusCredit(@PathVariable String cpf) {
         CustomerStatusCredit customerStatusCredit = creditAppraiserService.getClientStatus(cpf);
-
-        return null;
+        return ResponseEntity.ok(customerStatusCredit);
     }
 }
