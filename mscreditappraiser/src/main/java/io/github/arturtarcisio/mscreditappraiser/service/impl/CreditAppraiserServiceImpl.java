@@ -1,11 +1,14 @@
 package io.github.arturtarcisio.mscreditappraiser.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import io.github.arturtarcisio.mscreditappraiser.dto.*;
 import io.github.arturtarcisio.mscreditappraiser.exceptions.DataNotFoundException;
 import io.github.arturtarcisio.mscreditappraiser.exceptions.ErrorComunicationMicroserviceException;
+import io.github.arturtarcisio.mscreditappraiser.exceptions.ErrorRequestCardException;
 import io.github.arturtarcisio.mscreditappraiser.infra.clients.CardsResourceClientFeign;
 import io.github.arturtarcisio.mscreditappraiser.infra.clients.CustomerResourceClientFeign;
+import io.github.arturtarcisio.mscreditappraiser.mqueue.CardIssuanceRequestPublisher;
 import io.github.arturtarcisio.mscreditappraiser.service.CreditAppraiserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +27,7 @@ public class CreditAppraiserServiceImpl implements CreditAppraiserService {
 
     private final CustomerResourceClientFeign customerResourceClientFeign;
     private final CardsResourceClientFeign cardsResourceClientFeign;
+    private final CardIssuanceRequestPublisher cardIssuanceRequestPublisher;
 
     @Override
     public CustomerStatusCredit getClientStatus(String cpf) throws DataNotFoundException, ErrorComunicationMicroserviceException {
@@ -77,6 +82,16 @@ public class CreditAppraiserServiceImpl implements CreditAppraiserService {
                 throw new DataNotFoundException();
             }
             throw new ErrorComunicationMicroserviceException(e.getMessage(), status);
+        }
+    }
+
+    public ProtocolRequestCard requestCardIssuance(CardIssuanceRequestData data){
+        try{
+            cardIssuanceRequestPublisher.requestCard(data);
+            var protocol = UUID.randomUUID().toString();
+            return new ProtocolRequestCard(protocol);
+        }catch (Exception e) {
+            throw new ErrorRequestCardException(e.getMessage());
         }
     }
 }

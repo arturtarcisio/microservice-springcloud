@@ -1,10 +1,9 @@
 package io.github.arturtarcisio.mscreditappraiser.controller;
 
-import io.github.arturtarcisio.mscreditappraiser.dto.CreditRatingResponse;
-import io.github.arturtarcisio.mscreditappraiser.dto.CustomerStatusCredit;
-import io.github.arturtarcisio.mscreditappraiser.dto.DataCreditRatingRequest;
+import io.github.arturtarcisio.mscreditappraiser.dto.*;
 import io.github.arturtarcisio.mscreditappraiser.exceptions.DataNotFoundException;
 import io.github.arturtarcisio.mscreditappraiser.exceptions.ErrorComunicationMicroserviceException;
+import io.github.arturtarcisio.mscreditappraiser.exceptions.ErrorRequestCardException;
 import io.github.arturtarcisio.mscreditappraiser.service.CreditAppraiserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,6 +44,16 @@ public class CreditAppraiserController {
             return ResponseEntity.notFound().build();
         } catch (ErrorComunicationMicroserviceException e) {
             return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("card-issuance")
+    public ResponseEntity cardRequest(@RequestBody CardIssuanceRequestData data) {
+        try {
+            ProtocolRequestCard protocolRequestCard = creditAppraiserService.requestCardIssuance(data);
+            return ResponseEntity.ok(protocolRequestCard);
+        }catch (ErrorRequestCardException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }

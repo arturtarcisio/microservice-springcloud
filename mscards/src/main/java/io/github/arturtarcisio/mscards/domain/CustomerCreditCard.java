@@ -1,6 +1,8 @@
 package io.github.arturtarcisio.mscards.domain;
 
 import io.github.arturtarcisio.mscards.dto.CustomerCreditCardResponse;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +11,9 @@ import java.math.BigDecimal;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
+@Builder
 public class CustomerCreditCard {
 
     @Id
