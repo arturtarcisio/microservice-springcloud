@@ -1,20 +1,20 @@
 package io.github.arturtarcisio.mscards.mqueue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.arturtarcisio.mscards.domain.CreditCard;
 import io.github.arturtarcisio.mscards.domain.CustomerCreditCard;
 import io.github.arturtarcisio.mscards.dto.CardIssuanceRequestData;
 import io.github.arturtarcisio.mscards.repository.CreditCardRepository;
 import io.github.arturtarcisio.mscards.repository.CustomerCreditCardRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CardIssuanceSubscriber {
 
     private final CreditCardRepository creditCardrepository;
@@ -34,7 +34,7 @@ public class CardIssuanceSubscriber {
                     .build();
             customerCreditCardRepository.save(customerCreditCard);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error receiving card issuance request: {}", e.getMessage());
         }
     }
 }
